@@ -1,0 +1,44 @@
+
+t_col <- function(color, percent = 50, name = NULL) {
+                                        #	  color = color name
+                                        #	percent = % transparency
+                                        #	   name = an optional name for the color
+    ## Get RGB values for named color
+    rgb.val <- col2rgb(color)
+    ## Make new color using input color as base and alpha set by transparency
+    t.col <- rgb(rgb.val[1], rgb.val[2], rgb.val[3],
+                 max = 255,
+                 alpha = (100-percent)*255/100,
+                 names = name)
+    ## Save the color
+    invisible(t.col)    
+}
+
+
+rhs.ode <- function(t,y,parms){
+	Sval  <- y[1]
+	Eval  <- y[2]
+	Vval  <- y[3]
+	Npop  <- Sval + Eval + Vval
+        with(parms,{
+		dS <- h(t) - d*Sval
+		dE <- -(d + gamv)*Eval 
+		dV <- gamv*Eval - d*Vval
+    		dy <- as.vector(c(dS,dE,dV))        
+		return(list(dy))
+		})
+}
+
+vaccinate_Fixed <- function(t,y,parms){
+    with(parms,{
+        Nv <- min(y[1], Nv)
+	Sval  <- y[1] - Nv
+	Eval  <- y[2] + Nv
+	Vval  <- y[3]
+	y <- c(Sval, Eval, Vval)
+        return(y)
+    })
+}
+
+
+

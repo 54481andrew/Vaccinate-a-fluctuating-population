@@ -1,0 +1,47 @@
+
+## -----General-----
+
+## This code is used to generate the figures displayed in
+## the paper "When to vaccinate a fluctuating wildlife population: is timing everything?".
+## Most directories contain a simulation script to generate
+## the data, and a graphing script to produce the EPS figures.
+## Some figures do not require much simulation (e.g. Figure 1), and in these
+## cases the simulation and graphing are combined into a single
+## script. Data that appears in figures 6 and 8 are simulated
+## using C++ - see the notes section for details on how to
+## simulate these. 
+
+## Parameters for the simulations are specified in a dataframe
+## called parmat. Time units are days. The parameter names are
+
+## -----Parameter List------
+
+## d - rate of host death from natural causes
+## gamv - rate at which hosts transition from class Sv to V
+## Nv - number of hosts exposed to vaccine during each campaign
+## tv - the timing of annual vaccination, measured as days into the year
+## tb - the duration of the birthing season
+## NPeak - the peak population size, achieved once per year
+## Rp - basic reproduction number of the pathogen
+## Bp - transmission coefficient of the pathogen
+## gamp - rate at which infected hosts transition out of infected class
+## pmu - probability an infected host dies from infection (rather than recovers) 
+
+## -----Simulation times-----
+
+## Figure 1: < 1 minute
+## Figure 2: 154 core minutes
+## Figure 3: 316 cpu minutes (when 25 tb values used. Figure generated with 365 values)
+## Figure 4: 137 core minutes   
+## Figure 5: < 1 minute
+## Figure 6: see below
+## Figure 7: < 1 minute
+## Figure 8: see below
+
+## ------Notes-----
+
+## --The birth rate "b" parameter is specified by choosing
+## parameter values for NPeak, d, and tb. 
+
+## --Figures 6 and 8
+

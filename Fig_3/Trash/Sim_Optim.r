@@ -1,0 +1,186 @@
+## This script solves for the best vaccination time, given
+## host demography and attributes of the vaccination
+## campaign. 
+
+############################################
+############# USER INPUT ###################
+############################################
+
+
+rm(list = ls(all = TRUE))
+datname = "Fig_3" ## Name of the data file produced
+parmat = expand.grid(NPar = 0, 
+                     d = c(1/(365), 1/(365*2.5), 1/(365*5), 1/(365*10)),
+                     gamv = 1/14,
+                     Nv = 500, 
+                     tb = seq(1,365, length.out = 25),
+                     T = 365, NPeak = 1000,
+                     tvstar = 0,
+                     downtv80 = 0, uptv80 = 0,
+                     downtv90 = 0, uptv90 = 0,
+                     downtv95 = 0, uptv95 = 0,
+                     downtv975 = 0, uptv975 = 0,
+		     vavgstar = 0, vnull = 0)
+
+## Use the specified peak population size to
+## determine the constant birth rate during
+## the breeding season. This relationship
+## NPeak and b is derived in the supplemental
+## Mathematical file. 
+parmat$b     <- with(parmat,
+                     NPeak*d/(exp(d*(T-tb))*(exp(d*tb)-1)/(exp(d*T)-1)))
+
+
+############################################
+############## END USER INPUT ##############
+############################################
+
+## Load packages for lsoda and parallel
+## simulations. 
+require(deSolve)
+require(parallel)
+source('Tools/Functions.r', local = TRUE)
+
+
+NPars = nrow(parmat)
+parmat$NPar = 1:NPars
+
+
+nyears   <- 100 ## Number of years to simulate each parameter set
+maxtimes <- 365*nyears 
+times    <- seq(0,maxtimes, by = 1) 
+witimes <- times >= (nyears-1)*365 ## Times used to assess the vaccination program
+yeartimes <- c(times[witimes]%%365)
+yeartimes[length(yeartimes)] <- 365
+tvvals <- matrix(c(0.1,seq(1,364.9,length.out = 25)), ncol = 1) ## Used to approximate V vs tv (below)
+
+###############################################
+########## SET UP DATA STORAGE ################
+###############################################
+
+## Create a text file so that for each parameter
+## set, the parameter values, simulation errors,
+## and simulation output are saved. The resulting
+## data file is stored within the "Data" folder.
+
+filename = paste("Data/", datname, sep = '')
+## Write the parameter matrix
+write.table(parmat[1,][-1,], file = filename, append = F)
+
+
+#########################################
+#### DEFINE THE SIMULATION FUNCTION #####
+#########################################
+
+## This function simulates the ODE system, and uses
+## the "optimize" function to find the timing of
+## vaccination that best elevates the population's
+## seroprevalence.
+## mcl.fun takes an argument "i" that tells the
+## simulation to use parameters from the i^th
+## row of the parameter matrix.
+
+mcl.fun = function(i){
+
+    ## Define the cost function that, for a given timing of
+    ## vaccination tv and parameters, returns the average
+    ## population seroprevalence due to vaccination. 
+    cost.fxn <- function(tv,parms){
+        TVal  <- parmat$T[i]
+        NVacc <- parms$Nv
+        vacctimes <- seq(tv, maxtimes,by = TVal)
+        y0 = c(1000, 0, 0)
+        names(y0) = c('S','Sv','V')
+        out  <- data.frame(lsoda(y = y0, times = times,
+                                 func = rhs.jv, parms = parms,
+                                 events=list(func = vaccinate.jv, time=vacctimes),
+                                 maxsteps = 100000))
+	vals    <- with(out[witimes,], V/(S + Sv + V))
+	vals[1] <- vals[length(vals)]
+	vapprox = splinefun(x = yeartimes, vals, method = "periodic")
+        VAvg <- 1/365*(integrate(vapprox, lower = 0, upper = 365, stop.on.error = FALSE)$value)
+        return(VAvg)
+    }## End cost.fxn
+
+    ## In order to calculate the vaccination window, we must know how well
+    ## suboptimal vaccination programs perform. Here, we evaluate cost.fun
+    ## across a range of tv values. Later, this data will be used to guide
+    ## the optimize function to find the best vaccination strategy. 
+    vnullvals <- apply(X = tvvals, MARGIN = 1, FUN = cost.fxn, parms = parmat[i,])
+
+    ## Use vnullvals to find the interval that contains the best strategy (maximum VAvg)
+    wi.interval <- c(max(1, which.max(vnullvals) - 1), min(which.max(vnullvals) + 1, length(tvvals)))
+    interval <- tvvals[wi.interval]
+
+    ## Find optimal time of vaccination and corresponding average seroprevalence
+    uroot <- optimize(f=cost.fxn, interval = interval, parmat[i,], maximum=TRUE)
+    tvstar <- uroot$maximum ## Best tv value
+    vavgstar <- uroot$objective ## Maximum value
+
+    ## Find and store 90% and 95% optimal strategy    
+    wi.down <- which(tvvals <= tvstar)
+    wi.up <- which(tvvals >= tvstar)
+
+    if(length(wi.down) > 1){
+        f.down.approx <- approxfun((vnullvals/vavgstar)[wi.down], tvvals[wi.down])
+        ## 90% optimal
+        if(!is.na(f.down.approx(0.9))){
+            parmat$downtv90[i] <- f.down.approx(0.9)
+        }else{
+            parmat$downtv90[i] <- 0
+        }
+        ## 95% optimal
+        if(!is.na(f.down.approx(0.95))){
+            parmat$downtv95[i] <- f.down.approx(0.95)
+        }else{
+            parmat$downtv95[i] <- 0
+        }
+    }else{
+        parmat$downtv90[i] <- 0
+        parmat$downtv95[i] <- 0
+    }
+
+    if(length(wi.up) > 1){
+        f.up.approx <- approxfun((vnullvals/vavgstar)[wi.up], tvvals[wi.up])
+        if(!is.na(f.up.approx(0.9))){
+        parmat$uptv90[i] <- f.up.approx(0.9)
+        }else{
+            parmat$uptv90[i] <- 365
+        }
+        if(!is.na(f.up.approx(0.95))){
+            parmat$uptv95[i] <- f.up.approx(0.95)
+        }else{
+            parmat$uptv95[i] <- 365
+        }    
+    }else{
+        parmat$uptv90[i] <- 0
+        parmat$uptv95[i] <- 0
+    }
+
+    ## Store the optimal strategy (tv, vavg) in parmat
+    parmat$tvstar[i] <- tvstar
+    parmat$vavgstar[i] <- vavgstar
+
+    ## Store the typical average seroprevalence in parmat
+    vnullfun = splinefun(x = c(tvvals,365.1), c(vnullvals,vnullvals[1]))
+    parmat$vnull[i]  <- 1/365*integrate(vnullfun, lower = 0, upper = 365)$value
+
+    ## Write the data by adding a
+    ## the data from row i of parmat
+    ## to the data file [filename]
+    write.table(parmat[i,], file = filename, append = T, col.names = F, row.names = F)
+    print(paste("NPar:", i, ' / ', NPars, ' ; Time: ', Sys.time() - starttime),
+          quote = FALSE)
+    return(i)
+}
+
+## Run the simulations. If mclapply throws an error, lapply can be used. 
+starttime <- Sys.time()
+mcl.out <- mclapply(X = 1:NPars, FUN = mcl.fun, mc.cores = detectCores()-2)
+
+## Read in the simulated data, reorder the rows, and rewrite to file
+refparmat <- read.table(file = filename, header = T)
+refparmat <- refparmat[order(refparmat$NPar),]
+write.table(refparmat, file = filename, append = F, row.names = F)
+parmat <- read.table(file = filename, header = T)
+
