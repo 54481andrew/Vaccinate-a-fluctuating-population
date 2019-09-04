@@ -96,7 +96,7 @@ out.base$N <- with(out.base, S + Iv + Ip + V + P)
 ## Graph Figure that shows dynamics of each class, for each of the
 ## 3 vaccination times.
 
-fn <- 'Figure_S3.eps' ## File is written here
+fn <- 'Figure_GraphDynamics.eps' ## File is written here
 setEPS()
 postscript(file = fn, height = 5, width = 5)
 par(omi = c(0.5,0.5,0.1,0.1), mai = c(0.1, 0.0, 0.0, 0.0))

@@ -1,45 +1,68 @@
+## This script outputs a figure that shows how the number of susceptible,
+## infected, and recovered hosts varies over the course of a year when the
+## population has reached a stable limit cycle. This script prints the
+## size of each class at time t%%T = 0, which is then fed into the Gillespie
+## algorithm as an initial condition. 
+
 rm(list = ls(all = TRUE))
 
-require(parallel)
-require(deSolve)
+############################################
+############# USER INPUT ###################
+############################################
+
 parmat <- expand.grid(d = c(1/(1*365)),
                       gamv = 1/14,
-                      rho = c(0),
-                      tb = 120, T = 365, NPeak = 4045,
+                      Nv = 0,
+                      tb = 120, T = 365, NPeak = 2696,
                       gamp = c(1/(30)), pmu = 0,
 		      Rp = c(2),
                       tv = 0, type = c('f'))
 
+## Use the specified peak population size to
+## determine the constant birth rate during
+## the breeding season. This relationship
+## NPeak and b is derived in the supplemental
+## Mathematical file.
 parmat$b     <- with(parmat,
                      NPeak*d/(exp(d*(T-tb))*(exp(d*tb)-1)/(exp(d*T)-1)))
+## The transmission coefficient depends on the mode of transmission that is
+## assumed. 'f' is frequency dependent, 'd' is density dependent. 
 parmat$Bp[parmat$type=='f']    <- with(parmat[parmat$type=='f',], Rp*(d+gamp))
 parmat$Bp[parmat$type=='d']    <- with(parmat[parmat$type=='d',], Rp*d*(d+gamp)*T/(b*tb))
-NPathVals <- nrow(parmat)
-TBurnIn <- 10*365
 
 ############################################
 ############## END USER INPUT ##############
 ############################################
 
-###Add columns that store the row number,
-###and statistics on the min, average, and
-###max of S and V
+NPathVals <- nrow(parmat)
+
+## Specify the amount of time that the system is simulated - 
+## should be long enough to ensure stable limit cycle is
+## reached. 
+TBurnIn <- 10*365
+
+## Load in a package that allows parallel computation, and
+## the solving of ode's with lsoda. Also, load in functions
+## that return the differentials of the system of ode's that
+## our paper studies. 
+require(parallel)
+require(deSolve)
+source('Tools/Functions.r', local = TRUE)
+
 
 #########################################
 #### DEFINE THE SIMULATION FUNCTION #####
 #########################################
-###This function does all the simulation.
-###mcl.fun takes an argument "i" that tells the
-###simulation to use parameters from the i^th
-###row of the parameter matrix.
+
+## This function performs the simulation.
+## mcl.fun takes an argument "i" that tells the
+## simulation to use parameters from the i^th
+## row of the parameter matrix.
 
 starttime <- Sys.time()
 mclBurn <- function(i){
-###Load functions that return differentials
-
-    source('Tools/Functions.r', local = TRUE)
-
-###Define a vector of times at which vaccination occurs
+    
+    ## Define a vector of times at which vaccination occurs
     tv <- parmat$tv[i]
     T  <- parmat$T[i]
     burntimes <- seq(0, TBurnIn, by = 1)
@@ -58,11 +81,8 @@ mclBurn <- function(i){
 }
 
 BurnSolSet <- mclapply(X = 1:NPathVals, FUN = mclBurn, mc.cores = detectCores() - 2)
-##print("Finished Non-Vaccinated Simulations")
+
 ## Graph
-
-
-source('Tools/Functions.r', local = TRUE)
 tc <- 50
 wi.graph <- 1
 for(i in wi.graph){
@@ -82,7 +102,7 @@ for(i in wi.graph){
     mod.out$time <- mod.out$time%%365
     ## Population Size
     setEPS()
-    fn <- 'Figure_S1.eps'
+    fn <- 'Figure_Rat.eps'
     postscript(file = fn, width = 5,
         height = 4)
     par(mai = c(0.75, 0.75, 0.25, 0.25))
@@ -90,13 +110,6 @@ for(i in wi.graph){
     tb <- unique(parmat$tb)
     polygon(x = c(0,tb,tb,0), y =c(-100,-100,1.2*1.03,1.2*1.03), col = 'gray90',
             border = NA)
-#    matlines(mod.out$time, mod.out$pIp, type = 'b', pch = 1,
-#             lty = 1, lwd = 1, col = 'red', cex = 0.5)
-#    matlines(mod.out$time, mod.out$pTotInf, type = 'b', pch = 1,
-#             lty = 1, lwd = 1, col = 'gray', cex = 0.5)
-#    matlines(mod.out$time, mod.out$pS, type = 'b', pch = 1,
-#             lty = 1, lwd = 1, col = 'blue', cex = 0.5)
-################################
     matlines(mod.out$time, mod.out$Ip/NPeak, type = 'b', pch = 2,
              lty = 1, lwd = 2, col = 'red', cex = 1)
     matlines(mod.out$time, (mod.out$Ip + mod.out$P)/NPeak, type = 'b', pch = 2,
@@ -118,6 +131,7 @@ mtext(side = 2, text = 'Fraction of Peak Population', line = 2.5)
     dev.off()
 }## Close figure loop
 
+## Calculate and print the size of each class at t%%T = 0. 
 wi <- (out$time == TBurnIn)
 state <- round(out[wi,])
 state$N <- with(state, S + Iv + Ip + V + P)

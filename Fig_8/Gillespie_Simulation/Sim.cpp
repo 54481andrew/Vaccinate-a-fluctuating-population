@@ -33,7 +33,7 @@ int NTrials = 50; // Number of simulations for each parameter set
 //stores a unique set of parameters. Element i,j of
 //TExtMat stores the time that the pathogen persists in
 //the jth trial of parameter set i. 
-int NParSets = tvLEN*tbVals.size()*R0pVals.size()*RhoVals.size()*gampVals.size()*dVals.size()*npeakVals.size();
+int NParSets = tvLEN*tbVals.size()*R0pVals.size()*NvVals.size()*gampVals.size()*dVals.size()*npeakVals.size();
 std::vector<std::vector<double>> ParMat(NParSets, std::vector<double>(11)); // NParSets x 11 matrix
 std::vector<std::vector<double>> TExtMat(NParSets, std::vector<double>(NTrials)); // NParSets x NTrials matrix
 
@@ -89,7 +89,8 @@ int main()
       double Nudge = 0.0000001; //Fudge parameter that moves the simulation past event conflicts (see below) 
       
       double StartTime = 0;
-      double EndTime = 6.0*365.0; //Maximum time to run each simulation trial
+      double StartVaccinationTime = 2*365.0; // Vaccination occurs if t > StartVaccinationTime
+      double EndTime = 8.0*365.0; //Maximum time to run each simulation trial
       double tick = 1.0; //OneSim writes data at time-intervals tick
       
       // Set up RNG via function dis(0.0,1.0): returns uniform random between 0 and 1
@@ -108,13 +109,13 @@ int main()
       if(VerboseWriteFlag)
 	{      
 	  out_data.open(FileNameDat);
-	  out_data << "time S Iv Ip V P N births deaths ninfv ninfp nrecv nrecp S_death Iv_death Ip_death V_death P_death svacc npopvacc totvacc totbirthson totbirthsoff\n";
+	  out_data << "time S Sv Ip V P N births deaths ninfv ninfp nrecv nrecp S_death Sv_death Ip_death V_death P_death svacc npopvacc totvacc totbirthson totbirthsoff\n";
 	}
 
       //Define simulation variables
-      int S, Iv, Ip, V, P, NPop, NFails, NFailsTot, whichindex, nbirths,
+      int S, Sv, Ip, V, P, NPop, NFails, NFailsTot, whichindex, nbirths,
 	ndeaths, ninfv, ninfp, nrecv, nrecp,
-	S_death, Iv_death, Ip_death, V_death, P_death, svacc, npopvacc,
+	S_death, Sv_death, Ip_death, V_death, P_death, svacc, npopvacc,
 	totvacc, totbirthson, totbirthsoff;
       double npeak, b0, tb, T, Nv,tv, b, gamv, R0p, Bp, gamp, d,
 	Event_Rate, Event_Rate_Prod, RandDeath, dTime, t, ti,
@@ -139,18 +140,18 @@ int main()
 	  ti = StartTime;
 	  t = StartTime;
 	  S = SInit; //S
-	  Iv = 0; //Iv
+	  Sv = 0; //Sv
 	  Ip = IpInit;
 	  V = 0; //V
 	  P = PInit; //P
-	  NPop = S + Iv + Ip + V + P;
+	  NPop = S + Sv + Ip + V + P;
 	  
 	  tmodT = (double) std::fmod(t,T);
 	  b = (double) b0*(tmodT < tb);
 	  
 	  //Track births, deaths, recoveries, etc for error checking
 	  nbirths = 0; ndeaths = 0; ninfv = 0; ninfp = 0; nrecv = 0; 
-	  nrecv = 0; S_death = 0; Iv_death = 0; Ip_death = 0;  
+	  nrecv = 0; S_death = 0; Sv_death = 0; Ip_death = 0;  
 	  V_death = 0; P_death = 0; svacc = 0; npopvacc = 0; 
 	  totvacc = 0; totbirthson = 0; totbirthsoff = 0;
 	  
@@ -160,7 +161,7 @@ int main()
 	      {
 		if( t >= ti && VerboseWriteFlag) //Write values at intervals "tick"
 		  {
-		    out_data << t << " " << S << " " << Iv << " " << Ip << " " << V << " " << P  << " " << NPop << " " << nbirths << " " << ndeaths <<  " " << ninfv << " " << ninfp << " " << nrecv << " " << nrecp << " " << S_death << " " << Iv_death << " " << Ip_death << " " << V_death << " " << P_death << " " << svacc << " " << npopvacc << " " << totvacc << " " << totbirthson << " " <<  totbirthsoff << "\n"; 
+		    out_data << t << " " << S << " " << Sv << " " << Ip << " " << V << " " << P  << " " << NPop << " " << nbirths << " " << ndeaths <<  " " << ninfv << " " << ninfp << " " << nrecv << " " << nrecp << " " << S_death << " " << Sv_death << " " << Ip_death << " " << V_death << " " << P_death << " " << svacc << " " << npopvacc << " " << totvacc << " " << totbirthson << " " <<  totbirthsoff << "\n"; 
 		    ti += tick;
 		    //Reset values that are used for debugging
 		    nbirths = 0; ndeaths = 0; svacc = 0; npopvacc = 0; totvacc = 0; totbirthson = 0; 
@@ -169,7 +170,7 @@ int main()
 	  }
 
 	      // Calculate total rate of events
-	      Event_Rate = b + d*NPop + (Bp*S*Ip + Bp*Iv*Ip)/NPop + gamv*Iv + gamp*Ip;
+	      Event_Rate = b + d*NPop + (Bp*S*Ip + Bp*Sv*Ip)/NPop + gamv*Sv + gamp*Ip;
 	      Event_Rate_Prod = Event_Rate*dis(generator);
 	      
 	  
@@ -208,22 +209,22 @@ int main()
 		      RandDeath = dis(generator)*NPop;
 		      if( RandDeath < S ) //S dies
 			{S--; S_death++;}
-		      else if(RandDeath < S + Iv) //Iv dies
-			{Iv--; Iv_death++;}
-		      else if(RandDeath < S + Iv + Ip) //Ip dies
+		      else if(RandDeath < S + Sv) //Sv dies
+			{Sv--; Sv_death++;}
+		      else if(RandDeath < S + Sv + Ip) //Ip dies
 			{Ip--; Ip_death++;}
-		      else if(RandDeath < S + Iv + Ip + V) //V dies
+		      else if(RandDeath < S + Sv + Ip + V) //V dies
 			{V--; V_death++;}
 		      else{P--; P_death++;}  //P dies	
 		      NPop--; ndeaths++;
 		    }  
 		  else if(Event_Rate_Prod <= b + d*NPop + Bp*Ip*S/NPop) //Event: Pathogen infection of S
 		    {S--; Ip++; ninfp++;}
-		  else if(Event_Rate_Prod <= b + d*NPop + (Bp*Ip*S + Bp*Ip*Iv)/NPop ) //Event: Pathogen infection of V
-		    {Iv--; Ip++; ninfp++;}
-		  else if(Event_Rate_Prod <= b + d*NPop + (Bp*Ip*S + Bp*Ip*Iv)/NPop + gamv*Iv) //Event: Iv Recovery
-		    {Iv--;V++;nrecv++;}
-		  else if(Event_Rate_Prod <= b + d*NPop + (Bp*Ip*S + Bp*Ip*Iv)/NPop + gamv*Iv + gamp*Ip) //Event: Ip death
+		  else if(Event_Rate_Prod <= b + d*NPop + (Bp*Ip*S + Bp*Ip*Sv)/NPop ) //Event: Pathogen infection of V
+		    {Sv--; Ip++; ninfp++;}
+		  else if(Event_Rate_Prod <= b + d*NPop + (Bp*Ip*S + Bp*Ip*Sv)/NPop + gamv*Sv) //Event: Sv Recovery
+		    {Sv--;V++;nrecv++;}
+		  else if(Event_Rate_Prod <= b + d*NPop + (Bp*Ip*S + Bp*Ip*Sv)/NPop + gamv*Sv + gamp*Ip) //Event: Ip death
 		    {Ip--; NPop--; } // Changed to allow death from pathogen infection. 
 		}
 	      else{
@@ -232,7 +233,7 @@ int main()
 		  {
 		  case 0 : b = b0; totbirthson++; break; //Start of birthing season
 		  case 1 : b = 0.0; totbirthsoff++; break; //End of birthing season
-		  case 2 : totvacc++; int temp = (int) round( (double) Nv*S/(std::max(NPop,1)));  temp  = std::min( temp,  S);  S -= temp;  Iv += temp; // Annual vaccination
+		  case 2 : totvacc++; int temp = (int) round( (double) Nv*S/(std::max(NPop,1)));  temp  = std::min( temp,  S); temp = (t > StartVaccinationTime)*temp; S -= temp;  Sv += temp; // Annual vaccination
 		  }//End else
 
 		//Set dTime so t is updated to conflict time.
@@ -251,7 +252,7 @@ int main()
 
 	  // Write data one more time
 	  if(VerboseWriteFlag){
-	    out_data << t << " " << S << " " << Iv << " " << Ip << " " << V << " " << P  << " " << NPop << " " << nbirths << " " << ndeaths <<  " " << ninfv << " " << ninfp << " " << nrecv << " " << nrecp << " " << S_death << " " << Iv_death << " " << Ip_death << " " << V_death << " " << P_death << " " << svacc << " " << npopvacc << " " << totvacc << " " << totbirthson << " " << totbirthsoff << "\n"; 
+	    out_data << t << " " << S << " " << Sv << " " << Ip << " " << V << " " << P  << " " << NPop << " " << nbirths << " " << ndeaths <<  " " << ninfv << " " << ninfp << " " << nrecv << " " << nrecp << " " << S_death << " " << Sv_death << " " << Ip_death << " " << V_death << " " << P_death << " " << svacc << " " << npopvacc << " " << totvacc << " " << totbirthson << " " << totbirthsoff << "\n"; 
 	  }
 	}//Close loop through NTrials
       out_data.close();
@@ -286,11 +287,11 @@ void Initialize()
   int i = 0;
   for(int i1=0; i1<tvVals.size(); i1++)
     for(int i2=0; i2<R0pVals.size(); i2++) 
-	  for(int i3=0; i3<RhoVals.size(); i3++) 
+	  for(int i3=0; i3<NvVals.size(); i3++) 
 	    for(int i4=0; i4<tbVals.size(); i4++)
 	      for(int i5=0; i5<gampVals.size(); i5++)
 		for(int i6=0; i6<dVals.size(); i6++)
-		  for(int i7=0; i7<npeakVals.size(); i7++)		  
+		  for(int i7=0; i7<npeakVals.size(); i7++)
 		    {
 		      npeak = npeakVals[i7];
 		      d = dVals[i6];
@@ -301,7 +302,7 @@ void Initialize()
 		      ParMat[i][1] = b; //b
 		      ParMat[i][2] = d; //d
 		      ParMat[i][3] = R0pVals[i2]*(d + gamp); //Bp
-		      ParMat[i][4] = RhoVals[i3]*npeak; //Nv
+		      ParMat[i][4] = NvVals[i3]; //Nv
 		      ParMat[i][5] = tvVals[i1]; //tv
 		      ParMat[i][6] = 0.07; //gamv
 		      ParMat[i][7] = gampVals[i5]; //gamp

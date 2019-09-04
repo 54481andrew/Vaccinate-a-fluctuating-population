@@ -24,17 +24,12 @@ cols = colorRampPalette(c('blue', 'orange'))(length(ZVals))
 source('Tools/Functions.r', local = T)
 
 ### Graph both file types
-for(type in c('.png')){
-    fn <- paste('Figure_S',type, sep='')
+    fn <- 'Figure_S.eps'
 
-##    setEPS()
-##    postscript(file = fn, height = 5, width = 5)
-    png(file = fn, height = 5, width = 5, res = 400, units = 'in')
-    ## layout(matrix(c(1,2,
-    ##             3,4), nrow = 2, byrow = T), widths = c(0.4,0.4,0.0),
-    ##    heights = c(0.25,0.25,0.25,0.25))
+    setEPS()
+    postscript(file = fn, height = 5, width = 5)
     par(mar = c(3, 3, 1.5, 0.5))
-for(i.f in 1:nFVals){
+i.f = 1
     FVal = FVals[i.f]
     plot.mat = matrix(nrow = nXVals, ncol = nZVals)
     for(i.z in 1:nZVals){
@@ -48,8 +43,6 @@ for(i.f in 1:nFVals){
     matlines(XVals, plot.mat, lwd = 1.5, lty = 1, col = cols)
     mm <- apply(X = plot.mat, MARGIN = 2, FUN = which.max)
     mmind <- cbind(mm,c(1,2,3,4))
-##    matpoints(XVals[mm], plot.mat[mmind], pch = 1)
-#    abline(v = FVals[i.f], lwd = 0.25, lty = 3)
 
 ###Axes
     yticks = seq(0,1,by = 0.1)
@@ -63,10 +56,9 @@ mtext(side = 2, text = 'Average Seroprevalence', line = 2.25, outer = FALSE, cex
              padj = 0.5)
     }
 
-
     xticks = round(seq(0,365, by = 30.4))
     labticks = c(0, NA, NA, 3, NA, NA, 6, NA, NA, 9, NA, NA, 12)
-###Axis labels
+    ## Axis labels
     if(i.f %in% c(1,2)){
         axis(side = 1, labels = FALSE, at = xticks)
     }
@@ -76,7 +68,7 @@ mtext(side = 2, text = 'Average Seroprevalence', line = 2.25, outer = FALSE, cex
     }
 
     if(i.f==1){
-        legendtext = (c('0 Days', '7 days', '14 days', '30 days'))
+        legendtext = (c('0 Days', '7 days', '14 days', '30 days', '60 days'))
         legend(x = 0.06*365, y = 0.45, legend = legendtext, col = cols,
                lwd = 2, bty = 'n', cex = 0.7,
                title = as.expression(bquote(underline('Immunity Lag'))))
@@ -86,6 +78,6 @@ mtext(side = 2, text = 'Average Seroprevalence', line = 2.25, outer = FALSE, cex
     mtext(side = 3, text =  paste('Birthing Season: ',
                                   '4 Months',sep=''),
           cex = 0.7)
-}
+
 dev.off()
-}## End loop through figure types
+

@@ -1,13 +1,8 @@
-buildrun: Gillespie_Simulation/Sim.cpp Gillespie_Simulation/Sim_Base.cpp
-	echo "Running simulations without vaccination..."
-	g++ -o Gillespie_Simulation/main_base Gillespie_Simulation/Sim_Base.cpp -fopenmp
-	cd Gillespie_Simulation && time ./main_base
-	echo
-	echo
-	echo "Running simulations with vaccination..."
+buildrun: Gillespie_Simulation/Sim.cpp 
+	echo "Running simulations"
 	g++ -o Gillespie_Simulation/main Gillespie_Simulation/Sim.cpp -fopenmp
 	cd Gillespie_Simulation && time ./main
 	echo
 	echo
-	echo "Graphing..."
+	echo "Building figure"
 	Rscript Graph.r

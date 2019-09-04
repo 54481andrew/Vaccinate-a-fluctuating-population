@@ -11,7 +11,7 @@ rm(list = ls(all = TRUE))
 datname <- 'Fig_4'
 parmat <- expand.grid(d = c(1/(1*365)),
                       gamv = c(1/14, 1/30),
-                      Nv = c(250, 500),
+                      Nv = c(250),
                       tb = 120, T = 365, NPeak = 1000,
                       gamp = c(1/30.4, 1/365), pmu = c(0,0.9),
 		      Rp = c(2,5),

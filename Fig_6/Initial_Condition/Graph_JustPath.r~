@@ -5,7 +5,7 @@ require(deSolve)
 parmat <- expand.grid(d = c(1/(1*365)),
                       gamv = 1/14,
                       rho = c(0),
-                      tb = 120, T = 365, NPeak = 2000,
+                      tb = 120, T = 365, NPeak = 2696,
                       gamp = c(1/(30)), pmu = 0,
 		      Rp = c(2),
                       tv = 0, type = c('f'))

@@ -1,6 +1,6 @@
 ## This script reads the data written by Simulate.r, and
 ## graphs vaccine effectiveness for different timings
-## of vaccination. The plot is a 2x2 pane. 
+## of vaccination. The plot is a 2x2 pane.
 
 rm(list = ls(all=TRUE))
 

@@ -1,7 +1,10 @@
-// Initial values for S, Ip, and P used in Sim.cpp and Sim_Base.cpp.
-// All other state variables are initialized at 0. Values
-// below are output from Initial/Graph_justpath.r, giving the
-// values of state variables at t = 0 on the stable limit cycle. 
+/* 
+   Initial values for S, Ip, and P used in Sim.cpp and Sim_Base.cpp.
+   This state variables are initialized by an ODE system in the 
+   directory Initial_Condition/, which simulates the system 
+   long enough to generate stable cycles. 
+*/ 
+
 int SInitGlob = 429;
 int IpInitGlob = 40;
 int PInitGlob = 909;
@@ -13,7 +16,7 @@ std::vector<double> gampVals{ 1/(30.0) };
 std::vector<double> dVals{ 1/(1.0*365.0) };
 std::vector<int> npeakVals{2696};
 std::vector<double> tvVals;
-std::vector<double> RhoVals{ 0.1855 , 0.37}; // vaccination fraction; only used in Sim.cpp
+std::vector<double> NvVals{ 500.0 , 1000.0 }; // Number of vaccines, used in Sim.cpp only
 
 int tvLEN = 25; // Number of vaccination times to use
 
