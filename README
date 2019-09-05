@@ -1,20 +1,22 @@
 
 ## -----General-----
 
-## This code is used to generate the figures displayed in
-## the paper "When to vaccinate a fluctuating wildlife population: is timing everything?".
-## Most directories contain a simulation script to generate
-## the data, and a graphing script to produce the EPS figures.
-## Some figures do not require much simulation (e.g. Figure 1), and in these
-## cases the simulation and graphing are combined into a single
-## script. Data that appears in figures 6 and 8 are simulated
-## using C++ - see the notes section for details on how to
-## simulate these. 
+## This code is used to generate the figures displayed in the paper
+## "When to vaccinate a fluctuating wildlife population: is timing
+## everything?".  Most directories contain a simulation script to
+## generate the data, and a graphing script to produce the EPS
+## figures.  Some figures do not require much simulation (e.g. Figure
+## 1), and in these cases the simulation and graphing are combined
+## into a single script. Data that appears in figures 6 and 8 are
+## simulated using C++ - see the notes section for details on how to
+## simulate these.  The Mathematica file contains derivations and
+## expressions for average population size, pathogen R0, etc, for
+## our model. 
+
+## -----Parameter List------
 
 ## Parameters for the simulations are specified in a dataframe
 ## called parmat. Time units are days. The parameter names are
-
-## -----Parameter List------
 
 ## d - rate of host death from natural causes
 ## gamv - rate at which hosts transition from class Sv to V
@@ -46,6 +48,10 @@
 
 ## --The birth rate "b" parameter is specified by choosing
 ## parameter values for NPeak, d, and tb. 
+
+## --Similar to the note above, we specify the transmission coefficient
+## "Bp" by specifying the value of R0, and then solving for the value of
+## Bp that R0 implies. 
 
 ## --Figures 6 and 8
 
