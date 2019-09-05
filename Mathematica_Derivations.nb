@@ -1,0 +1,1212 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     38572,       1204]
+NotebookOptionsPosition[     34606,       1067]
+NotebookOutlinePosition[     34966,       1083]
+CellTagsIndexPosition[     34923,       1080]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["\<\
+The goal of this supplementary is to derive expressions presented in the \
+Appendix. We start by finding the density of hosts in a population that is \
+stably cycling, which is subsequently used for parameterization of the model. \
+\>", "Text",
+ CellChangeTimes->{{3.74774454611541*^9, 3.7477445518111687`*^9}, {
+  3.748101731885462*^9, 3.748101780621932*^9}, {3.7487112224403543`*^9, 
+  3.74871123331636*^9}, {3.76202201405538*^9, 3.7620220470367317`*^9}, {
+  3.762022226922516*^9, 3.762022268719308*^9}, {3.762098036674219*^9, 
+  3.762098037960527*^9}, {3.76227060406155*^9, 3.7622706259461193`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Solve for the stable limit cycle", "Chapter",
+ CellChangeTimes->{{3.762022057855133*^9, 3.762022085951006*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Define the susceptible-only model", "Subsection",
+ CellChangeTimes->{{3.748101815390012*^9, 3.748101823789979*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", 
+  RowBox[{"S", ",", " ", "SSol"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dSdt", " ", "=", " ", 
+   RowBox[{"b0", " ", "-", " ", 
+    RowBox[{"d", " ", 
+     RowBox[{"S", "[", "t", "]"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"DSolve", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"S", "'"}], "[", "t", "]"}], "\[Equal]", "dSdt"}], ",", " ", 
+     RowBox[{
+      RowBox[{"S", "[", "t0", "]"}], " ", "==", " ", "S0"}]}], "}"}], ",", 
+   " ", 
+   RowBox[{"S", "[", "t", "]"}], ",", "t"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.746880126764475*^9, 3.746880248584663*^9}, {
+  3.746880360547853*^9, 3.7468804069132147`*^9}, {3.746880948518733*^9, 
+  3.746880958459877*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"S", "[", "t", "]"}], "\[Rule]", 
+    FractionBox[
+     RowBox[{
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "d"}], " ", "t"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"b0", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"d", " ", "t"}]]}], "-", 
+        RowBox[{"b0", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"d", " ", "t0"}]]}], "+", 
+        RowBox[{"d", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"d", " ", "t0"}]], " ", "S0"}]}], ")"}]}], "d"]}], "}"}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.746880959043714*^9, 3.7468910447603683`*^9, 
+  3.746891274749711*^9, 3.748101880138691*^9, 3.7487112631208773`*^9, 
+  3.748734282524953*^9, 3.7500225328847313`*^9, 3.762022293852565*^9, 
+  3.762022876488832*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ "Define the solution of susceptible individuals as a function of time, \
+initial time, and initial condition. This solution only holds during the \
+breeding season, t < ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["t", "B"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ". "
+}], "Text",
+ CellChangeTimes->{{3.748101840351508*^9, 3.748101857614121*^9}, {
+  3.762022823153413*^9, 3.7620228718562202`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"SSol1", "[", 
+    RowBox[{"t_", ",", "t0_", ",", "S0_"}], "]"}], " ", ":=", " ", 
+   FractionBox[
+    RowBox[{
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{
+       RowBox[{"-", "d"}], " ", "t"}]], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"b0", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"d", " ", "t"}]]}], "-", 
+       RowBox[{"b0", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"d", " ", "t0"}]]}], "+", 
+       RowBox[{"d", " ", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"d", " ", "t0"}]], " ", "S0"}]}], ")"}]}], "d"]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.746880967948986*^9, 3.746880968459407*^9}, {
+  3.746884774355526*^9, 3.746884816146598*^9}}],
+
+Cell["During the non-breeding season, the solution is given by: ", "Text",
+ CellChangeTimes->{{3.748101863573957*^9, 3.748101871646221*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"DSolve", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"S", "'"}], "[", "t", "]"}], "\[Equal]", "dSdt"}], "/.", 
+      RowBox[{"b0", "\[Rule]", "0"}]}], ",", " ", 
+     RowBox[{
+      RowBox[{"S", "[", "t0", "]"}], " ", "==", " ", "S0"}]}], "}"}], ",", 
+   " ", 
+   RowBox[{"S", "[", "t", "]"}], ",", "t"}], "]"}]], "Input",
+ CellChangeTimes->{{3.746884819513752*^9, 3.746884828401829*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"S", "[", "t", "]"}], "\[Rule]", 
+    RowBox[{
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "d"}], " ", "t"}], "+", 
+       RowBox[{"d", " ", "t0"}]}]], " ", "S0"}]}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{{3.7468848218152857`*^9, 3.746884829027082*^9}, 
+   3.746891060674369*^9, 3.746891295182166*^9, 3.748101895857058*^9, 
+   3.748711273903673*^9, 3.7487342864236307`*^9, 3.750022539580937*^9, 
+   3.762022330644333*^9, 3.762022881156062*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ "Define the analogous solution for susceptible dynamics during the \
+off-breeding season, t > ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["t", "B"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ". "
+}], "Text",
+ CellChangeTimes->{{3.762022891576268*^9, 3.762022917712255*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"SSol2", "[", 
+    RowBox[{"t_", ",", "t0_", ",", "S0_"}], "]"}], " ", ":=", " ", 
+   RowBox[{"S0", " ", 
+    RowBox[{"Exp", "[", 
+     RowBox[{
+      RowBox[{"-", "d"}], " ", 
+      RowBox[{"(", 
+       RowBox[{"t", "-", "t0"}], ")"}]}], "]"}]}]}], ";"}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Impose periodic boundary condition", "Subsection",
+ CellChangeTimes->{{3.7468802602721767`*^9, 3.746880268576096*^9}, {
+  3.74871128198873*^9, 3.748711282804936*^9}, {3.7620229466593847`*^9, 
+  3.762022949416226*^9}}],
+
+Cell["\<\
+Define S0 as the population size at time mod(t, T). To be a stable limit \
+cycle, we require that the composite solution returns to the value S0, when \
+simulated forward one period. This condition uniquely determines the constant \
+S0 (below):\
+\>", "Text",
+ CellChangeTimes->{{3.748101965302617*^9, 3.748102000822927*^9}, {
+  3.748711293844762*^9, 3.7487112968767757`*^9}, {3.762022965536457*^9, 
+  3.762023054088441*^9}, {3.762023090248856*^9, 3.762023192424717*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"S0Sol", " ", "=", " ", 
+  RowBox[{"Solve", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"SSol2", "[", 
+       RowBox[{"T", ",", "tb", ",", 
+        RowBox[{"SSol1", "[", 
+         RowBox[{"tb", ",", "0", ",", "S0"}], "]"}]}], "]"}], ")"}], 
+     "\[Equal]", " ", "S0"}], ",", "S0"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.746880271376378*^9, 3.746880313546379*^9}, {
+  3.746880417937685*^9, 3.746880480380067*^9}, {3.746880516846591*^9, 
+  3.7468805174178247`*^9}, {3.7468808888034277`*^9, 3.7468809124134293`*^9}, {
+  3.746880991259678*^9, 3.746880995473855*^9}, {3.746884626324512*^9, 
+  3.746884631018073*^9}, {3.746884853861855*^9, 3.74688488146775*^9}, {
+  3.7468897619826183`*^9, 3.7468897619889317`*^9}, {3.746890882247333*^9, 
+  3.7468908872541018`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"S0", "\[Rule]", 
+    FractionBox[
+     RowBox[{"b0", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"d", " ", "tb"}]]}], ")"}]}], 
+     RowBox[{"d", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          RowBox[{"d", " ", 
+           RowBox[{"(", 
+            RowBox[{"T", "-", "tb"}], ")"}]}], "+", 
+          RowBox[{"d", " ", "tb"}]}]]}], ")"}]}]]}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{3.7468908954712143`*^9, 3.7468910865865726`*^9, 
+  3.746891335599855*^9, 3.747499173753426*^9, 3.748102004092408*^9, 
+  3.748711302438098*^9, 3.7487342993057528`*^9, 3.750022543966814*^9, 
+  3.762023195264978*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FullSimplify", "[", "S0Sol", "]"}]], "Input",
+ CellChangeTimes->{{3.747499176161118*^9, 3.74749918293594*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"S0", "\[Rule]", 
+    FractionBox[
+     RowBox[{"b0", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"d", " ", "tb"}]]}], ")"}]}], 
+     RowBox[{"d", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{"d", " ", "T"}]]}], ")"}]}]]}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{{3.747499177985373*^9, 3.747499183661381*^9}, 
+   3.7481020054957237`*^9, 3.7487113038760147`*^9, 3.748734300444007*^9, 
+   3.7500225450549726`*^9, 3.7620231994465218`*^9}]
+}, Open  ]],
+
+Cell["Store simplified verstions of SSol1 and SSol2: ", "Text",
+ CellChangeTimes->{{3.762023213832698*^9, 3.762023222160808*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FullSSol1", " ", "=", " ", 
+  RowBox[{"FullSimplify", "[", 
+   RowBox[{"SSol1", "[", 
+    RowBox[{"t", ",", "0", ",", 
+     RowBox[{"S0", "/.", 
+      RowBox[{"S0Sol", "[", 
+       RowBox[{"[", "1", "]"}], "]"}]}]}], "]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.746880998223289*^9, 3.7468810362019997`*^9}, 
+   3.746884067305903*^9, 3.746884889290831*^9}],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{"b0", " ", 
+   SuperscriptBox["\[ExponentialE]", 
+    RowBox[{
+     RowBox[{"-", "d"}], " ", "t"}]], " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{"d", " ", "t"}]]}], "-", 
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{"d", " ", "T"}]], "+", 
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{"d", " ", 
+       RowBox[{"(", 
+        RowBox[{"t", "+", "T"}], ")"}]}]], "+", 
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{"d", " ", "tb"}]]}], ")"}]}], 
+  RowBox[{"d", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{"d", " ", "T"}]]}], ")"}]}]]], "Output",
+ CellChangeTimes->{3.746890927067499*^9, 3.746891106297516*^9, 
+  3.7468913482060003`*^9, 3.748102007130561*^9, 3.748711305836425*^9, 
+  3.748734301576054*^9, 3.750022546344385*^9, 3.7620232289301043`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FullSSol2", " ", "=", "  ", 
+  RowBox[{"FullSimplify", "[", 
+   RowBox[{"SSol2", "[", 
+    RowBox[{"t", ",", "tb", ",", 
+     RowBox[{"FullSSol1", "/.", 
+      RowBox[{"t", "\[Rule]", " ", "tb"}]}]}], "]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.7468846425500097`*^9, 3.746884690489043*^9}, {
+  3.746884735409531*^9, 3.746884738466381*^9}, {3.746884904588442*^9, 
+  3.7468849431616697`*^9}, {3.7468897620571747`*^9, 3.746889762063059*^9}, {
+  3.746890920448215*^9, 3.746890923724893*^9}}],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{"b0", " ", 
+   SuperscriptBox["\[ExponentialE]", 
+    RowBox[{"d", " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"-", "t"}], "+", "T"}], ")"}]}]], " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{"d", " ", "tb"}]]}], ")"}]}], 
+  RowBox[{"d", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{"d", " ", "T"}]]}], ")"}]}]]], "Output",
+ CellChangeTimes->{3.746890928343437*^9, 3.7468911169162483`*^9, 
+  3.7468913612344933`*^9, 3.7481020085058537`*^9, 3.748711307384815*^9, 
+  3.748734302372191*^9, 3.750022547287342*^9, 3.7620232310911837`*^9}]
+}, Open  ]],
+
+Cell["Define the full composite limit cycle, Sc[t]: ", "Text",
+ CellChangeTimes->{{3.748102013750803*^9, 3.74810202265479*^9}, {
+  3.7620232456089277`*^9, 3.762023249328726*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "Sc", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Sc", "[", "teval_", "]"}], ":=", " ", 
+  RowBox[{"Piecewise", "[", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"FullSSol1", "/.", 
+        RowBox[{"(", 
+         RowBox[{"t", "\[Rule]", " ", "teval"}], ")"}]}], ",", " ", 
+       RowBox[{"teval", " ", "\[LessEqual]", "  ", "tb"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"FullSSol2", "/.", 
+        RowBox[{"(", 
+         RowBox[{"t", "\[Rule]", " ", "teval"}], ")"}]}], ",", 
+       RowBox[{"teval", ">", "tb"}]}], "}"}]}], "}"}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.74688414840882*^9, 3.746884195016519*^9}, {
+  3.746884388892252*^9, 3.7468844165060387`*^9}, {3.746889762101788*^9, 
+  3.7468897621079197`*^9}, {3.746891397809205*^9, 3.74689140061469*^9}, {
+  3.74873459116854*^9, 3.748734591423448*^9}, {3.748735907661745*^9, 
+  3.7487359078828897`*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Verify stable limit cycle, obtain max, min, and average population statistics\
+\
+\>", "Chapter",
+ CellChangeTimes->{{3.7620233091857147`*^9, 3.762023333368759*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Verify stable limit cycle Sc[t]", "Subsection",
+ CellChangeTimes->{{3.76202341948109*^9, 3.762023441472951*^9}}],
+
+Cell["Verify that Sc[T]==Sc[0]", "Text",
+ CellChangeTimes->{{3.76202334525819*^9, 3.762023358464876*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Simplify", "[", 
+  RowBox[{
+   RowBox[{"Sc", "[", "0", "]"}], ",", " ", 
+   RowBox[{"tb", " ", ">", " ", "0"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.7620233605242167`*^9, 3.762023385489828*^9}}],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{"b0", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{"d", " ", "tb"}]]}], ")"}]}], 
+  RowBox[{"d", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{"d", " ", "T"}]]}], ")"}]}]]], "Output",
+ CellChangeTimes->{{3.7620233627135344`*^9, 3.762023386031693*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Simplify", "[", 
+  RowBox[{
+   RowBox[{"Sc", "[", "T", "]"}], ",", " ", 
+   RowBox[{"tb", " ", "<", " ", "T"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.762023389519021*^9, 3.762023400193139*^9}}],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{"b0", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{"d", " ", "tb"}]]}], ")"}]}], 
+  RowBox[{"d", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{"d", " ", "T"}]]}], ")"}]}]]], "Output",
+ CellChangeTimes->{3.7620234008153954`*^9}]
+}, Open  ]],
+
+Cell["Solution checks out. ", "Text",
+ CellChangeTimes->{{3.762023408513774*^9, 3.762023412208877*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Min, Average, Max population size", "Subsection",
+ CellChangeTimes->{{3.762023447441062*^9, 3.7620234508809223`*^9}, {
+  3.76202349454526*^9, 3.762023498177063*^9}}],
+
+Cell["\<\
+Minimum population size occurs immediately before the breeding season begins, \
+mod(t,T) = 0\
+\>", "Text",
+ CellChangeTimes->{{3.7620235196491137`*^9, 3.762023544481168*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"minSize", " ", "=", " ", 
+  RowBox[{"Simplify", "[", 
+   RowBox[{
+    RowBox[{"Sc", "[", "0", "]"}], ",", " ", 
+    RowBox[{"tb", " ", ">", " ", "0"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.7620235118472767`*^9, 3.762023512826066*^9}, {
+  3.76202354804152*^9, 3.7620235606651993`*^9}, {3.7620236127310553`*^9, 
+  3.762023615801319*^9}}],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{"b0", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{"d", " ", "tb"}]]}], ")"}]}], 
+  RowBox[{"d", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{"d", " ", "T"}]]}], ")"}]}]]], "Output",
+ CellChangeTimes->{
+  3.7620235137330503`*^9, {3.762023549385024*^9, 3.7620235614509163`*^9}, 
+   3.7620236164840384`*^9}]
+}, Open  ]],
+
+Cell["Average population size is", "Text",
+ CellChangeTimes->{{3.750022722220595*^9, 3.750022726468362*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"avgSize", " ", "=", " ", 
+  RowBox[{"FullSimplify", "[", 
+   RowBox[{
+    RowBox[{"1", "/", "T"}], " ", 
+    RowBox[{"Integrate", "[", 
+     RowBox[{
+      RowBox[{"Sc", "[", "t", "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"t", ",", "0", ",", "T"}], "}"}], ",", " ", 
+      RowBox[{"Assumptions", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"t", " ", "<", " ", "T"}], ",", " ", 
+         RowBox[{"tb", " ", "<", " ", "T"}], ",", " ", 
+         RowBox[{"T", " ", ">", " ", "0"}], ",", " ", 
+         RowBox[{"tb", " ", ">", " ", "0"}]}], "}"}]}]}], "]"}]}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.750022729871941*^9, 3.750022787020814*^9}, {
+  3.7620234645883837`*^9, 3.76202346554533*^9}, {3.762023618993745*^9, 
+  3.762023622409545*^9}}],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{"b0", " ", "tb"}], 
+  RowBox[{"d", " ", "T"}]]], "Output",
+ CellChangeTimes->{{3.750022762181467*^9, 3.7500227887320766`*^9}, 
+   3.762023469687736*^9, 3.762023624186139*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ "Maximum population size occurs immediately after the breeding season ends, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"mod", 
+     RowBox[{"(", 
+      RowBox[{"t", ",", "T"}], ")"}]}], "=", 
+    SubscriptBox["t", "B"]}], TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "Text",
+ CellChangeTimes->{{3.7500225827402487`*^9, 3.750022623020259*^9}, {
+  3.7620235734332733`*^9, 3.762023597904193*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"maxSize", " ", "=", " ", 
+  RowBox[{"FullSimplify", "[", 
+   RowBox[{"Sc", "[", "tb", "]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.7500226075741577`*^9, 3.750022640828528*^9}, {
+  3.762023625794609*^9, 3.762023628001315*^9}}],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{"b0", " ", 
+   SuperscriptBox["\[ExponentialE]", 
+    RowBox[{"d", " ", 
+     RowBox[{"(", 
+      RowBox[{"T", "-", "tb"}], ")"}]}]], " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{"d", " ", "tb"}]]}], ")"}]}], 
+  RowBox[{"d", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{"d", " ", "T"}]]}], ")"}]}]]], "Output",
+ CellChangeTimes->{{3.7500226111412287`*^9, 3.750022641401021*^9}, {
+  3.762023603040433*^9, 3.762023628589031*^9}}]
+}, Open  ]],
+
+Cell["The ratio of max/min is", "Text",
+ CellChangeTimes->{{3.762023635785294*^9, 3.762023640265279*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"maxSize", "/", "minSize"}]], "Input",
+ CellChangeTimes->{{3.762023642407873*^9, 3.76202364473731*^9}}],
+
+Cell[BoxData[
+ SuperscriptBox["\[ExponentialE]", 
+  RowBox[{"d", " ", 
+   RowBox[{"(", 
+    RowBox[{"T", "-", "tb"}], ")"}]}]]], "Output",
+ CellChangeTimes->{3.76202364514641*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Parameterization", "Chapter",
+ CellChangeTimes->{{3.7620260831175337`*^9, 3.762026084940506*^9}}],
+
+Cell["Mastomys: Average rodent population is 2000 / village.", "Text",
+ CellChangeTimes->{{3.7620261482135553`*^9, 3.7620261500527267`*^9}, {
+  3.762026294533862*^9, 3.762026302476809*^9}, {3.762026438742545*^9, 
+  3.762026448973331*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"b0Mast", " ", "=", " ", 
+  RowBox[{"N", "[", 
+   RowBox[{"Solve", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          FractionBox[
+           RowBox[{"b0", " ", "tb"}], 
+           RowBox[{"d", " ", "T"}]], "/.", 
+          RowBox[{"tb", "\[Rule]", " ", "120"}]}], "/.", 
+         RowBox[{"d", "\[Rule]", " ", 
+          RowBox[{"1", "/", 
+           RowBox[{"(", 
+            RowBox[{"1", " ", "365"}], ")"}]}]}]}], "/.", 
+        RowBox[{"T", "\[Rule]", " ", "365"}]}], ")"}], "\[Equal]", " ", 
+      "2000"}], ",", " ", "b0"}], "]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.7620261755571136`*^9, 3.762026197075069*^9}, {
+  3.7620262291424007`*^9, 3.7620262715491734`*^9}, {3.762026521862294*^9, 
+  3.76202652244564*^9}, {3.7620265549741573`*^9, 3.762026573141547*^9}, {
+  3.762038799644782*^9, 3.762038799741893*^9}, {3.762038848694009*^9, 
+  3.76203885893832*^9}, {3.762039900277486*^9, 3.7620399003609*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"b0", "\[Rule]", "16.666666666666668`"}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{{3.762026261747781*^9, 3.762026272264359*^9}, 
+   3.76202653096085*^9, 3.762026575271166*^9, 3.7620388018608*^9, {
+   3.76203885038872*^9, 3.7620388600389223`*^9}, 3.762039902558627*^9}]
+}, Open  ]],
+
+Cell["Convert to peak population size: ", "Text",
+ CellChangeTimes->{{3.7620265934853992`*^9, 3.7620265974320803`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"maxSize", "/.", "b0Mast"}], "/.", 
+    RowBox[{"tb", "\[Rule]", " ", "120"}]}], "/.", 
+   RowBox[{"d", "\[Rule]", " ", 
+    RowBox[{"1", "/", 
+     RowBox[{"(", 
+      RowBox[{"1", " ", "365"}], ")"}]}]}]}], "/.", 
+  RowBox[{"T", "\[Rule]", " ", "365"}]}]], "Input",
+ CellChangeTimes->{{3.762026615284697*^9, 3.762026633407743*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", "2696.456150109809`", "}"}]], "Output",
+ CellChangeTimes->{3.762026634753952*^9, 3.7620388066139383`*^9, 
+  3.7620388630144167`*^9, 3.762039905983733*^9}]
+}, Open  ]],
+
+Cell["Set NPeak = 2696. ", "Text",
+ CellChangeTimes->{{3.762026647973488*^9, 3.7620266669493093`*^9}}],
+
+Cell["Badgers: Assume average population of 1000. ", "Text",
+ CellChangeTimes->{{3.762026128812684*^9, 3.762026139028735*^9}, {
+  3.762026452391597*^9, 3.762026462948991*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"b0Badg", " ", "=", " ", 
+  RowBox[{"N", "[", 
+   RowBox[{"Solve", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          FractionBox[
+           RowBox[{"b0", " ", "tb"}], 
+           RowBox[{"d", " ", "T"}]], "/.", 
+          RowBox[{"tb", "\[Rule]", " ", "60"}]}], "/.", 
+         RowBox[{"d", "\[Rule]", " ", 
+          RowBox[{"1", "/", 
+           RowBox[{"(", 
+            RowBox[{"4", " ", "365"}], ")"}]}]}]}], "/.", 
+        RowBox[{"T", "\[Rule]", " ", "365"}]}], ")"}], "\[Equal]", " ", 
+      "1000"}], ",", " ", "b0"}], "]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.762026094181074*^9, 3.762026124493904*^9}, {
+  3.762026470055869*^9, 3.762026513829424*^9}, {3.762026578661965*^9, 
+  3.762026582965567*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"b0", "\[Rule]", "4.166666666666667`"}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{3.762026549236218*^9, 3.762026585604267*^9, 
+  3.7620266754059477`*^9}]
+}, Open  ]],
+
+Cell["Convert to peak population size: ", "Text",
+ CellChangeTimes->{{3.762026601485384*^9, 3.762026605949244*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"maxSize", "/.", "b0Badg"}], "/.", 
+    RowBox[{"tb", "\[Rule]", " ", "60"}]}], "/.", 
+   RowBox[{"d", "\[Rule]", " ", 
+    RowBox[{"1", "/", 
+     RowBox[{"(", 
+      RowBox[{"4", " ", "365"}], ")"}]}]}]}], "/.", 
+  RowBox[{"T", "\[Rule]", " ", "365"}]}]], "Input",
+ CellChangeTimes->{{3.7620266885826807`*^9, 3.762026704192156*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", "1107.294454748217`", "}"}]], "Output",
+ CellChangeTimes->{3.762026706738986*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "Derive expressions for pathogen ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["R", 
+    RowBox[{"0", ",", "p"}]], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox[
+    SuperscriptBox["R", "*"], 
+    RowBox[{"0", ",", "p"}]], TraditionalForm]],
+  InitializationCell->True,
+  FormatType->"TraditionalForm"]
+}], "Chapter",
+ CellChangeTimes->{{3.7620236707863617`*^9, 3.762023676836924*^9}, {
+  3.7620973350637617`*^9, 3.762097400350438*^9}}],
+
+Cell[TextData[{
+ "Calculate the pathogen ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["R", "0"], TraditionalForm]]],
+ ", written R0p,  assuming frequency-dependent transmission. To this end, \
+plug the stable limit cycle solution Sc[t], which from hereon is notated \
+S[t], into the equation for ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["I", "p"], "(", "t", ")"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", then integrate over a period to find out whether the number of \
+pathogen-infected individuals grows or decays over the year. "
+}], "Text",
+ CellChangeTimes->{{3.74810205821667*^9, 3.748102067591011*^9}, {
+  3.7487113603767023`*^9, 3.748711401637608*^9}, {3.7487349378481197`*^9, 
+  3.7487349447122173`*^9}, {3.7620241920532627`*^9, 3.762024200602091*^9}, {
+  3.762024243365016*^9, 3.762024247642338*^9}, {3.762024280698455*^9, 
+  3.762024360282523*^9}, {3.762097618691218*^9, 3.762097642568254*^9}}],
+
+Cell[TextData[{
+ "The equation for ",
+ Cell[BoxData[
+  OverscriptBox["Ip", "."]],
+  CellChangeTimes->{{3.748711495641437*^9, 3.7487115236227016`*^9}}],
+ " is \n\n",
+ Cell[BoxData[
+  RowBox[{
+   OverscriptBox["Ip", "."], " ", "=", " ", 
+   RowBox[{
+    FractionBox[
+     RowBox[{
+      SubscriptBox["\[Beta]", "p"], " ", 
+      RowBox[{"S", "[", "t", "]"}], " ", 
+      RowBox[{"Ip", "[", "t", "]"}]}], 
+     RowBox[{"N", "[", "t", "]"}]], " ", "-", " ", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"d", " ", "+", " ", 
+       SubscriptBox["\[Gamma]", "p"]}], ")"}], " ", 
+     RowBox[{"Ip", "[", "t", "]"}]}]}]}]],
+  CellChangeTimes->{{3.748711495641437*^9, 3.7487115236227016`*^9}}],
+ ".     (1)\n\nN[t] is the total population size. Divide both sides of (1) by \
+Ip, and integrate from t = 0 to t = T.  Assuming that the population is \
+comprised of primarily susceptibles ( S[t] \[DotEqual] N[t] ), and an \
+infinitesimal number of pathogen infected hosts ( Ip[0] << 1 ), we can write \
+\n\nIp[ T ] = ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"Ip", "[", "0"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "] Exp[",
+ Cell[BoxData[
+  RowBox[{"  ", 
+   RowBox[{
+    RowBox[{"\[Integral]", " ", 
+     SubscriptBox["\[Beta]", "p"]}], "  ", "-", " ", 
+    RowBox[{"(", 
+     RowBox[{"d", " ", "+", " ", 
+      SubscriptBox["\[Gamma]", "p"]}], ")"}], " "}]}]],
+  CellChangeTimes->{{3.748711495641437*^9, 3.7487115236227016`*^9}}],
+ "dt   ].      (2)\n\nEquation (2) shows how an initial (small) density of \
+pathogen-infected individuals changes over one period. Specifically, (2) \
+implies that: \nif  ",
+ Cell[BoxData[
+  RowBox[{
+   RowBox[{"\[Integral]", " ", 
+    SubscriptBox["\[Beta]", "p"]}], "  ", "-", " ", 
+   RowBox[{"(", 
+    RowBox[{"d", " ", "+", " ", 
+     SubscriptBox["\[Gamma]", "p"]}], ")"}], " ", " "}]],
+  CellChangeTimes->{{3.748711495641437*^9, 3.7487115236227016`*^9}}],
+ "dt > 0, the density of Ip grows over the year, and the pathogen remains \
+endemic. \nif  ",
+ Cell[BoxData[
+  RowBox[{
+   RowBox[{"\[Integral]", " ", 
+    SubscriptBox["\[Beta]", "p"]}], "  ", "-", " ", 
+   RowBox[{"(", 
+    RowBox[{"d", " ", "+", " ", 
+     SubscriptBox["\[Gamma]", "p"]}], ")"}], " ", " "}]],
+  CellChangeTimes->{{3.748711495641437*^9, 3.7487115236227016`*^9}}],
+ "dt < 0, the density of Ip decays over the year, and the pathogen cannot \
+remain endemic. \nIn the above expressions, integration occurs over one \
+period of the stable limit cycle. Define the pathogen\[CloseCurlyQuote]s R0p \
+in terms of this threshold condition:  "
+}], "Text",
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQA2IQvWf+7ibJd68djazKO0C0i2phH4he8jNiDoiO33po
+IYiuKTi1CkTLxP7ZAqK/Pr17B0SHyFduUgHSp14d3wKir0Yf3gOi53TcANP/
+AiLOgOifpV1nQXTSq2M3QfQrBbb7IHrTEcYXIPoc38+XIHrnxTA2VSDtdq4R
+TB+eICQIotd8FhcG0f9//vcD0Rcua/uD6JKDKt9r2d843rjiCaYbnhv/B9Fq
+DHvY64D02RfneEC03ukyQRCdVs6kBKL5gzLVQLRZ705tEL2nItsMRIts9XMB
+0S2Jql4gWs5lcgyIZlorlwKiOWKPZYPoC3f+VYFoD3bBZSC67MrxlSA6ah7P
+oYVA2mEt2xEQDQBwpLTi
+  "]],
+
+Cell[BoxData[
+ RowBox[{
+  SubscriptBox["R", 
+   RowBox[{"0", ",", "p"}]], " ", "=", " ", 
+  FractionBox[
+   RowBox[{
+    SubscriptBox["\[Beta]", "p"], "  "}], 
+   RowBox[{"d", " ", "+", " ", 
+    SubscriptBox["\[Gamma]", "p"]}]], " "}]], "Input",
+ CellChangeTimes->{{3.76202505796014*^9, 3.762025149262206*^9}, {
+  3.762025833549296*^9, 3.76202584526094*^9}}],
+
+Cell[TextData[{
+ "The expression for the realized reproduction number, ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox[
+    SuperscriptBox["R", "*"], 
+    RowBox[{"0", ",", "p"}]], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", is derived in a similar manner, but without the assumption that the \
+population is comprised of susceptibles (S[t] \[DotEqual] N[t] ). When the \
+population is comprised of susceptibles (S[t]), vaccine-exposed ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    SubscriptBox["S", "v"]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "[t]), and vaccinated (V[t]),  the analogue of Eq. 2 is "
+}], "Text",
+ CellChangeTimes->{{3.762096981927095*^9, 3.762097154007296*^9}, {
+  3.762097519752059*^9, 3.762097568696225*^9}, {3.762097706472389*^9, 
+  3.762097710952331*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"Ip", "[", " ", "T", " ", "]"}], " ", "=", " ", 
+    FormBox[
+     RowBox[{"Ip", "[", "0"}],
+     TraditionalForm]}], "]"}], " ", 
+  RowBox[{
+   RowBox[{"Exp", "[", "  ", 
+    RowBox[{
+     RowBox[{"\[Integral]", " ", 
+      RowBox[{
+       SubscriptBox["\[Beta]", "p"], "  ", 
+       FractionBox[
+        RowBox[{"S", " ", "+", " ", 
+         SubscriptBox["S", "v"]}], "\[CapitalNu]"]}]}], " ", "-", " ", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"d", " ", "+", " ", 
+        SubscriptBox["\[Gamma]", "p"]}], ")"}], " ", "dt"}]}], "   ", "]"}], 
+   ".", "      ", 
+   RowBox[{"(", "3", ")"}]}]}]], "Input",
+ CellChangeTimes->{{3.762097160094206*^9, 3.7620971835838127`*^9}, {
+  3.7620975741603107`*^9, 3.762097578608371*^9}}],
+
+Cell[TextData[{
+ "Here, pathogen invasion is determined by the sign of ",
+ Cell[BoxData[
+  RowBox[{
+   RowBox[{"\[Integral]", " ", 
+    RowBox[{
+     SubscriptBox["\[Beta]", "p"], "  ", 
+     FractionBox[
+      RowBox[{"S", " ", "+", " ", 
+       SubscriptBox["S", "v"]}], "\[CapitalNu]"]}]}], " ", "-", " ", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"d", " ", "+", " ", 
+      SubscriptBox["\[Gamma]", "p"]}], ")"}], " ", "dt", " "}]}]],
+  CellChangeTimes->{{3.762097160094206*^9, 3.7620971835838127`*^9}}],
+ ". Similar to above, this allows us to derive that "
+}], "Text",
+ CellChangeTimes->{{3.762097192695446*^9, 3.762097256783452*^9}, {
+  3.762097583776402*^9, 3.7620975890406523`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  SubscriptBox[
+   SuperscriptBox["R", "*"], 
+   RowBox[{"0", ",", "p"}]], " ", "=", "  ", 
+  RowBox[{
+   FractionBox[
+    RowBox[{
+     SubscriptBox["\[Beta]", "p"], "  "}], 
+    RowBox[{"d", " ", "+", " ", 
+     SubscriptBox["\[Gamma]", "p"]}]], 
+   FractionBox["1", "T"], 
+   RowBox[{"\[Integral]", " ", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"S", " ", "+", " ", 
+       SubscriptBox["S", "v"]}], "\[CapitalNu]"], 
+     RowBox[{"dt", ".", " ", 
+      RowBox[{"(", "4", ")"}]}]}]}]}]}]], "Input",
+ CellChangeTimes->{{3.7620972584268827`*^9, 3.762097314544324*^9}, {
+  3.762097593480298*^9, 3.762097605064365*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "Expression for ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["f", "path"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", the fractional reduction in ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["R", 
+    RowBox[{"0", ",", "p"}]], TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "Chapter",
+ CellChangeTimes->{{3.76209748460071*^9, 3.7620974915378036`*^9}, {
+  3.7620980093314*^9, 3.762098013128553*^9}}],
+
+Cell["The fractional reduction is defined as", "Text",
+ CellChangeTimes->{{3.7620977399130173`*^9, 3.762097748928055*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  SubscriptBox["f", "path"], " ", "=", " ", 
+  RowBox[{
+   RowBox[{"1", " ", "-", " ", 
+    FractionBox[
+     RowBox[{
+      SubscriptBox["R", 
+       RowBox[{"0", ",", "p"}]], " "}], 
+     SubscriptBox[
+      SuperscriptBox["R", "*"], 
+      RowBox[{"0", ",", "p"}]]]}], " ", "=", " ", 
+   RowBox[{"1", " ", "-", " ", 
+    RowBox[{
+     FractionBox["1", "T"], 
+     RowBox[{"\[Integral]", " ", 
+      RowBox[{
+       FractionBox[
+        RowBox[{"S", " ", "+", " ", 
+         SubscriptBox["S", "v"]}], "\[CapitalNu]"], "dt"}]}]}]}]}]}]], "Input",\
+
+ CellChangeTimes->{{3.762097750849872*^9, 3.762097794482813*^9}}],
+
+Cell[TextData[{
+ "Now, substitute N - V = S + ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["S", "v"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " to find"
+}], "Text",
+ CellChangeTimes->{{3.762097805977502*^9, 3.7620978729762487`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  SubscriptBox["f", "path"], " ", "=", " ", 
+  RowBox[{
+   RowBox[{"1", " ", "-", " ", 
+    RowBox[{
+     FractionBox["1", "T"], 
+     RowBox[{
+      SuperscriptBox[
+       SubscriptBox["\[Integral]", "0"], "T"], " ", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", " ", "-", " ", 
+         FractionBox["V", "\[CapitalNu]"]}], ")"}], "dt"}]}]}]}], " ", "=", 
+   " ", 
+   RowBox[{
+    FractionBox["1", "T"], 
+    RowBox[{
+     SuperscriptBox[
+      SubscriptBox["\[Integral]", "0"], "T"], "  ", 
+     RowBox[{
+      FractionBox["V", "\[CapitalNu]"], " ", 
+      RowBox[{"dt", ".", " "}]}]}]}]}]}]], "Input",
+ CellChangeTimes->{{3.762097885233416*^9, 3.762097967176817*^9}}],
+
+Cell[TextData[{
+ "Thus, the fractional reduction in the pathogen\[CloseCurlyQuote]s ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["R", 
+    RowBox[{"0", ",", "p"}]], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is given by the average prevalence of vaccinated hosts at the stable limit \
+cycle. "
+}], "Text",
+ CellChangeTimes->{{3.76209796853048*^9, 3.762097998232452*^9}}]
+}, Open  ]]
+},
+WindowSize->{1097, 903},
+WindowMargins->{{Automatic, 24}, {Automatic, 31}},
+FrontEndVersion->"11.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September \
+21, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 612, 9, 49, "Text"],
+Cell[CellGroupData[{
+Cell[1195, 33, 117, 1, 65, "Chapter"],
+Cell[CellGroupData[{
+Cell[1337, 38, 121, 1, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[1483, 43, 776, 21, 75, "Input"],
+Cell[2262, 66, 907, 25, 51, "Output"]
+}, Open  ]],
+Cell[3184, 94, 429, 11, 32, "Text"],
+Cell[3616, 107, 791, 23, 56, "Input"],
+Cell[4410, 132, 140, 1, 30, "Text"],
+Cell[CellGroupData[{
+Cell[4575, 137, 476, 14, 32, "Input"],
+Cell[5054, 153, 566, 14, 36, "Output"]
+}, Open  ]],
+Cell[5635, 170, 303, 9, 32, "Text"],
+Cell[5941, 181, 312, 10, 32, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6290, 196, 223, 3, 44, "Subsection"],
+Cell[6516, 201, 480, 8, 49, "Text"],
+Cell[CellGroupData[{
+Cell[7021, 213, 808, 17, 32, "Input"],
+Cell[7832, 232, 849, 24, 58, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8718, 261, 134, 2, 32, "Input"],
+Cell[8855, 265, 679, 19, 58, "Output"]
+}, Open  ]],
+Cell[9549, 287, 129, 1, 30, "Text"],
+Cell[CellGroupData[{
+Cell[9703, 292, 382, 9, 32, "Input"],
+Cell[10088, 303, 956, 27, 58, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11081, 335, 515, 10, 32, "Input"],
+Cell[11599, 347, 732, 21, 58, "Output"]
+}, Open  ]],
+Cell[12346, 371, 178, 2, 30, "Text"],
+Cell[12527, 375, 968, 23, 54, "Input"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[13544, 404, 174, 4, 65, "Chapter"],
+Cell[CellGroupData[{
+Cell[13743, 412, 118, 1, 44, "Subsection"],
+Cell[13864, 415, 105, 1, 30, "Text"],
+Cell[CellGroupData[{
+Cell[13994, 420, 222, 5, 32, "Input"],
+Cell[14219, 427, 440, 14, 58, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14696, 446, 220, 5, 32, "Input"],
+Cell[14919, 453, 416, 14, 58, "Output"]
+}, Open  ]],
+Cell[15350, 470, 103, 1, 30, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15490, 476, 171, 2, 44, "Subsection"],
+Cell[15664, 480, 184, 4, 30, "Text"],
+Cell[CellGroupData[{
+Cell[15873, 488, 365, 8, 32, "Input"],
+Cell[16241, 498, 495, 16, 58, "Output"]
+}, Open  ]],
+Cell[16751, 517, 108, 1, 30, "Text"],
+Cell[CellGroupData[{
+Cell[16884, 522, 796, 20, 32, "Input"],
+Cell[17683, 544, 212, 5, 46, "Output"]
+}, Open  ]],
+Cell[17910, 552, 431, 12, 32, "Text"],
+Cell[CellGroupData[{
+Cell[18366, 568, 252, 5, 32, "Input"],
+Cell[18621, 575, 617, 19, 58, "Output"]
+}, Open  ]],
+Cell[19253, 597, 105, 1, 30, "Text"],
+Cell[CellGroupData[{
+Cell[19383, 602, 126, 2, 32, "Input"],
+Cell[19512, 606, 179, 5, 33, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19752, 618, 103, 1, 65, "Chapter"],
+Cell[19858, 621, 238, 3, 30, "Text"],
+Cell[CellGroupData[{
+Cell[20121, 628, 1000, 24, 51, "Input"],
+Cell[21124, 654, 328, 6, 32, "Output"]
+}, Open  ]],
+Cell[21467, 663, 119, 1, 30, "Text"],
+Cell[CellGroupData[{
+Cell[21611, 668, 392, 11, 32, "Input"],
+Cell[22006, 681, 182, 3, 32, "Output"]
+}, Open  ]],
+Cell[22203, 687, 102, 1, 30, "Text"],
+Cell[22308, 690, 175, 2, 30, "Text"],
+Cell[CellGroupData[{
+Cell[22508, 696, 805, 22, 51, "Input"],
+Cell[23316, 720, 212, 5, 32, "Output"]
+}, Open  ]],
+Cell[23543, 728, 115, 1, 30, "Text"],
+Cell[CellGroupData[{
+Cell[23683, 733, 393, 11, 32, "Input"],
+Cell[24079, 746, 109, 2, 32, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[24237, 754, 511, 17, 71, "Chapter"],
+Cell[24751, 773, 939, 20, 74, "Text"],
+Cell[25693, 795, 2996, 75, 290, "Text"],
+Cell[28692, 872, 359, 10, 55, "Input"],
+Cell[29054, 884, 809, 20, 55, "Text"],
+Cell[29866, 906, 793, 24, 49, "Input"],
+Cell[30662, 932, 693, 18, 38, "Text"],
+Cell[31358, 952, 646, 20, 55, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[32041, 977, 438, 14, 71, "Chapter"],
+Cell[32482, 993, 122, 1, 30, "Text"],
+Cell[32607, 996, 639, 21, 55, "Input"],
+Cell[33249, 1019, 246, 8, 32, "Text"],
+Cell[33498, 1029, 706, 23, 49, "Input"],
+Cell[34207, 1054, 383, 10, 34, "Text"]
+}, Open  ]]
+}
+]
+*)
+
