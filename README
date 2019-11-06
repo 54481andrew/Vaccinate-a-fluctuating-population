@@ -44,6 +44,10 @@
 ## Figure 8: 16 core minutes for c++ simulations; 20 minutes for Graph.r
 ## Table: 80 cpu minutes
 
+## Supplemental Figures are included in the code for Figure 2 (Fig S1),
+## Figure 4 (Fig S2), and within Fig_6_DENS (a density dependent version
+## of Figure 6).
+
 ## ------Notes-----
 
 ## --The birth rate "b" parameter is specified by choosing

@@ -63,9 +63,9 @@ for(ii in 1:nrow(gridvals)){
 
     ## Write an informative filename
     dn <- round(1/dval/365,1) ## Get lifespan in years
-    gvn <- round(1/gamvval) ## Get gamv in
-    dir.create('Figures/', showWarnings = FALSE)
-    fn <- paste( 'Figures/pmu_', pmuval,'gamv_', gvn,
+    gvn <- round(1/gamvval) ## Get gamv in days^-1
+    dir.create('Supplemental_Figures/', showWarnings = FALSE)
+    fn <- paste( 'Supplemental_Figures/pmu_', pmuval,'gamv_', gvn,
                 '.eps', sep = '' )
 
     setEPS()
