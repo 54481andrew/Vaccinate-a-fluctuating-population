@@ -91,7 +91,7 @@ int main()
       double StartTime = 0;
       double StartVaccinationTime = 2*365.0; // Vaccination occurs if t > StartVaccinationTime
       double EndTime = 8.0*365.0; //Maximum time to run each simulation trial
-      double tick = 1.0; //OneSim writes data at time-intervals tick
+      double tick = 15.0; //OneSim writes data at time-intervals tick
       
       // Set up RNG via function dis(0.0,1.0): returns uniform random between 0 and 1
       std::random_device rd{};

@@ -96,54 +96,6 @@ out.base$N <- with(out.base, S + Iv + Ip + V + P)
 
 ############################
 
-## Graph Figure that shows dynamics of each class, for each of the
-## 3 vaccination times.
-
-fn <- 'Figure_S4.eps'
-setEPS()
-    postscript(file = fn, height = 5, width = 5)
-par(omi = c(0.5,0.5,0.1,0.1), mai = c(0.1, 0.0, 0.0, 0.0))
-layout(matrix(1:3, ncol = 1), respect = FALSE)
-for(i in 1:(nrow(ParMat)-1)){
-    tvval <- ParMat$tv[i]
-    tv.first <- TBurnIn + tvval ### Get first vaccination time
-    out <- data.frame(meta.out[[i]])
-    tv <- ParMat$tv[i]
-    tv.first <- tv + TBurnIn
-    matplot(NA, xlim = c(TBurnIn-2*365, TBurnIn + 5*365), ylim = c(0,1200),
-            xaxt = 'n', yaxt = 'n',
-            xlab = '', ylab = '', )
-    for(yi in 1:50){
-        time <- yi*365
-        polygon(x = c(time, time + ParMat$tb[i], time + ParMat$tb[i], time),
-                y = c(-5000, -5000, 1200*1.03, 1200*1.03), col = 'gray90',
-                border = NA)
-    }
-    matlines(out$time, cbind(out$S, out$Ip),
-             col = c('blue', 'red'), lty = 1, lwd = 1.5, type = 'l')
-    taxis <- seq(0,365*50, by = 3*365/12)
-    if(i==3){labs = 1:50 - 10; mtext(side = 1, text = 'Time (Year)', line = 2)}else{labs = F}
-    axis(side = 1, labels = labs, at = (1:50)*365, tick = TRUE,
-         cex.axis = 0.75, padj =-1)
-    axis(side = 2,
-    labels = c(0, NA, 500, NA, 1000),
-    at = seq(0,1000, by = 250), cex.axis = 0.75, padj = 1)
-    mtext(side = 2,
-    text = as.expression(bquote('Number of Hosts')),
-    line = 2., outer = TRUE)
-    arrows(x0 = tv.first + seq(0,4380, by = 365), y0 = 1200, y1 = 1000,
-           lwd = 1.5, col = 'orange', length = 0.075)
-    matlines(out.base$time, out.base$N, lty = 1, col = 'black')
-    if(i==1){
-        legend(x = 'topleft', legend = c('Total','S', 'Ip'), col = c('black', 'blue', 'red', 'gray'),
-               lwd = 2, lty = 1, cex = 0.75, ncol = 1, bg = 'white')
-    }
-}
-dev.off()
-
-
-############################
-
 ## Graph figure that shows number of pathogen-infected hosts
 ## on the y-axis, time on the x-axis, for each of the 3 times
 ## of vaccination. Add a line for the case of no vaccination

@@ -216,6 +216,8 @@ for(jj in 1:NValues){
     plot(NA, xlim = c(0,365), ylim = c(0,1.2), xaxt = 'n', yaxt = 'n', xlab = '', ylab = '')
     polygon(x = c(0,120,120,0), y =c(-100,-100,1.2*1.03,1.2*1.03), col = 'gray90',
             border = NA)
+    ## The following line helps make the red line, which is identically 0, more visible. 
+    if(foc.year==1){abline(h = 0, col = 'red', lwd = 1)} 
     for(foc.year in foc.years){
         polygon(x = c(tvvals, rev(tvvals)),y = c(array.ext[1,jj,,foc.year], rev(array.ext[3,jj,,foc.year])),
                 col = foc.year + 1, border = NA)

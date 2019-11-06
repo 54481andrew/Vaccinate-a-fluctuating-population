@@ -4,7 +4,7 @@
 ## This code is used to generate the figures displayed in the paper
 ## "When to vaccinate a fluctuating wildlife population: is timing
 ## everything?".  Most directories contain a simulation script to
-## generate the data, and a graphing script to produce the EPS
+## generate the graphed data, and a graphing script to produce the EPS
 ## figures.  Some figures do not require much simulation (e.g. Figure
 ## 1), and in these cases the simulation and graphing are combined
 ## into a single script. Data that appears in figures 6 and 8 are
@@ -62,7 +62,7 @@
 ## The stable limit cycle is calculated in the Graph_JustPath.r script within the
 ## Initial_Condition directory. Graph_JustPath.r prints the values of the state
 ## variables at time t%%365 = 0. These values are used in the pars.h header file to
-## intialize the simulations.
+## intialize the simulations at the stable limit cycle.
 
 ## When compiled, the Sim.cpp script simulates the host population in the absence
 ## of vaccination until time [StartVaccinationTime] is exceeded. These initial
@@ -70,15 +70,21 @@
 ## in mean number of pathogen infected hosts, relative to when vaccination is
 ## applied annually. 
 
-## These scripts can be run by compiling, then running the compiled code. The Graph.r
+## These scripts can be run by compiling Sim.cpp, then running the compiled code. The Graph.r
 ## script (in the Fig_6 and Fig_8 directories) reads in the simulated data, and produces
 ## a 2x2 figure that shows the reduction in mean abundance of pathogen-infected hosts,
 ## as well as the probability of elimination, with respect to the timing of vaccination.
 
-## Instead of running each script separately, we've included a makefile that
+## Instead of running each script separately, we've also included a makefile that
 ## 1. compiles and runs Sim.cpp
 ## 2. runs Graph.r to produce the figure
+## The makefile is used in emacs by opening it, then typing M-x compile. Enter the
+## command make -k buildrun, and the simulations and graphs will be automatically
+## generated. 
 
-
+## Because the datasets associated with Gillespie simulations (Fig_6, Fig_8) were large, we
+## compressed them into tar.xz files. You must first uncompress this data,
+## or resimulate it, before running the graphing script. This is also true for the density-dependent
+## version of Figure 6 (Fig_6_DENS).
 
 
