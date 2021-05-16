@@ -90,8 +90,8 @@ for(jj in 1:NValues){
         
         ## For each simulation break, we'll 
         ## get mean abundance of pathogen-infected hosts prior to vaccination.
-        ## Start assessment 1 year before vaccination begins
-        minfoctime.path <- (VaccStartYear - 2)*365 + tvval 
+        ## Start assessment at time 0
+        minfoctime.path <- 0
         ## End assessment immediately before the first pulse vaccination 
         maxfoctime.path <- (VaccStartYear)*365 + tvval 
 
@@ -116,8 +116,8 @@ for(jj in 1:NValues){
                 
                 focYear <- focYears[foci]
                 
-                minfoctime.vacc <- (focYear-1)*365 + tvval ## start assessment at vaccination time tv
-                maxfoctime.vacc <- (focYear)*365 + tvval ## end assessment at tv + 365
+                minfoctime.vacc <- VaccStartYear*365 + (focYear-1)*365 + tvval ## start assessment at vaccination time tv
+                maxfoctime.vacc <- VaccStartYear*365 + (focYear)*365 + tvval ## end assessment at tv + 365
                 
                 ##Interpolate and average. 
                 maxt <- max(simdati$time)
@@ -135,7 +135,7 @@ for(jj in 1:NValues){
             ## We generate a 95\% confidence interval of vaccination outcomes by repeating the
             ## bootstrap procedure. In the line below, we limit our focus to simulations that
             ## have the pathogen present immediately before vaccination begins. 
-            valid.sims <- TExtMat[parrow,] >= (tvval + VaccStartYear*365+ tvval)
+            valid.sims <- TExtMat[parrow,] >= (tvval + VaccStartYear*365)
             total.valid.sims <- sum(valid.sims)
             for(booti in 1:length(valid.sims)){
                 valid.boot.set <- which(valid.sims) 
@@ -143,7 +143,8 @@ for(jj in 1:NValues){
 
                 ## Select bootstrap sample
                 ExtBoot[jj,tvi,foci,booti] = sum(TExtMat[parrow,boot.samp] <=
-                                           (tvval + focYears[foci]*365))/total.valid.sims
+                                                 (tvval + focYears[foci]*365 +
+                                                  VaccStartYear*365))/total.valid.sims
 
                 reddat <- 1 - meansimaft[boot.samp, foci]/meansimbef[boot.samp,1]
                 RedBoot[jj,tvi, foci, booti] <- mean(reddat, na.rm = TRUE)
@@ -154,7 +155,7 @@ for(jj in 1:NValues){
     }## Close tvi loop
     print(paste("************************** ", jj, " *************************", sep = ''),
           quote = FALSE)
-}
+} ## End loop through NValues
 
 
 
@@ -216,8 +217,6 @@ for(jj in 1:NValues){
     plot(NA, xlim = c(0,365), ylim = c(0,1.2), xaxt = 'n', yaxt = 'n', xlab = '', ylab = '')
     polygon(x = c(0,120,120,0), y =c(-100,-100,1.2*1.03,1.2*1.03), col = 'gray90',
             border = NA)
-    ## The following line helps make the red line, which is identically 0, more visible. 
-    if(foc.year==1){abline(h = 0, col = 'red', lwd = 1)} 
     for(foc.year in foc.years){
         polygon(x = c(tvvals, rev(tvvals)),y = c(array.ext[1,jj,,foc.year], rev(array.ext[3,jj,,foc.year])),
                 col = foc.year + 1, border = NA)

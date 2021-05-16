@@ -36,8 +36,8 @@ require(parallel)
 ###Add columns that store the row number,
 ###and statistics on the min, average, and
 ###max of S and V
-npars <- nrow(parmat)
-parmat$npar <- 1:npars
+NPars <- nrow(parmat)
+parmat$npar <- 1:NPars
 parmat$MaxSusfrac <- NA
 parmat$MaxVfrac <- NA
 parmat$AvgSusfrac <- NA
@@ -142,7 +142,7 @@ mcl.fun <- function(i){
                 append = TRUE, row.names = FALSE, col.names = FALSE)
 
     ## Print and return index to help with debugging
-    print(paste("npar: ", i, " / ", npars, ';  Time: ',Sys.time() - starttime, sep=""))
+    print(paste("npar: ", i, " / ", NPars, ';  Time: ',Sys.time() - starttime, sep=""))
     return(i)
 
 } ##Close the function mcl.fun
